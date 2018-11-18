@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable max-lines-per-function */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -155,7 +156,6 @@ HostedView.propTypes={
   match: PropTypes.object
 };
 
-/* eslint-disable-next-line max-lines-per-function */
 const BasicSection = ({store})=> <div className="fieldset">
       <div className="detail-field">
           <label>Package Type:</label>

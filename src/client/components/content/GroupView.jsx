@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import React from 'react';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -89,7 +90,7 @@ export default class GroupView extends React.Component {
     });
   };
 
-  /* eslint-disable-next-line max-lines-per-function */
+  /* eslint-disable max-lines-per-function */
   render() {
     let store = this.state.store;
     if(!Utils.isEmptyObj(store)) {
@@ -151,7 +152,7 @@ export default class GroupView extends React.Component {
     }
     return null;
   }
-  /* eslint-enable-next-line max-lines-per-function */
+  /* eslint-disable max-lines-per-function */
 }
 
 GroupView.propTypes={

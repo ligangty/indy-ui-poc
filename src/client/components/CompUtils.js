@@ -6,12 +6,12 @@ export const Utils = {
 
     if (store.allow_snapshots){
       options.push({icon: 'S',
-title: 'Snapshots allowed'});
+                    title: 'Snapshots allowed'});
     }
 
     if (store.allow_releases){
       options.push({icon: 'R',
-title: 'Releases allowed'});
+                    title: 'Releases allowed'});
     }
     return options;
   },
@@ -20,7 +20,7 @@ title: 'Releases allowed'});
 
     if (store.allow_snapshots){
       options.push({icon: 'S',
-title: 'Snapshots allowed'});
+                    title: 'Snapshots allowed'});
     }
 
     if (store.allow_releases){
@@ -63,8 +63,6 @@ title: 'Deployment allowed'});
     // let basepath = window.location.pathname;
     // basepath = basepath.replace('/app', '');
     // basepath = basepath.replace(/index.html.*/, '');
-
-
     let proto = window.location.protocol;
 
     // TODO: In-UI browser that allows simple searching

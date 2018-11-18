@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Deprecated: Not used
 export default class NavFooter extends React.Component {
   render(){
     // TODO: stats will be render based on the backend addons response, this is a mock;

@@ -1,40 +1,79 @@
-/* eslint-disable max-lines-per-function */
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  TextInput,
+  Checkbox,
+  Select,
+  SelectOption,
+  Button,
+  ButtonVariant
+} from '@patternfly/react-core';
 
 class ListControl extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      enableDebug: false
+      enableDebug: false,
+      searchValue: '',
+      orderByValue: '',
+      debugChecked: false
     };
   }
 
+  handleSearchChange = value => {
+    this.setState({
+      searchValue: value
+    });
+    this.props.handleSearch(value);
+  };
+
+  handleOrderByChange = value =>{
+    this.setState({
+      orderByValue: value
+    });
+  };
+
+  handleDebugChange = checked => {
+    this.setState({
+      debugChecked: checked
+    });
+    this.props.handleDebug(checked);
+  };
+
+
+  // eslint-disable-next-line max-lines-per-function
   render(){
+    const {searchValue, debugChecked} = this.state;
     return (
       <div className="control-panel">
         <div className="cp-row">
-          <button onClick={this.props.handleCreateNew}>New...</button>{' '}
+          <Button variant={ButtonVariant.secondary} onClick={this.props.handleCreateNew}>New...</Button>{' '}
           {
             this.props.useHideAll &&
-              <button onClick={this.props.handleHideAll}>Hide All</button>
+              <Button variant={ButtonVariant.secondary} onClick={this.props.handleHideAll}>Hide All</Button>
           }
         </div>
         {
           this.props.useSearch &&
             <div className="cp-row">
-              Search:{' '}<input name="query" onChange={this.props.handleSearch}/>
+              Search:{' '}
+              <TextInput
+              type="text"
+              id="search-query"
+              name="query"
+              value={searchValue}
+              onChange={this.handleSearchChange} />
             </div>
         }
         {
           this.props.useOrderBy && this.props.orderBys &&
             <div className="cp-row">
               Sort by:{' '}
-              <select name="orderProp">
+              <Select value={this.state.orderByValue} onChange={this.handleOrderByChange} id="sortBy">
                 {
-                  this.props.orderBys.map(orderBy=><option key={`legend-${orderBy.value}`} value={orderBy.value}>{orderBy.text}</option>)
+                  this.props.orderBys.map(orderBy=><SelectOption key={`legend-${orderBy.value}`} value={orderBy.value} label={orderBy.text} />)
                 }
-              </select>
+              </Select>
             </div>
         }
         {
@@ -42,7 +81,7 @@ class ListControl extends React.Component {
             <div className="cp-row">
               <div className="legend">
                 <div className="label" style={{fontSize: "75%",
-                  padding: ".2em .6em .3em"}}>Capability Legend:</div>
+padding: ".2em .6em .3em"}}>Capability Legend:</div>
                 <ul>
                   {
                     this.props.legends.map(option => <li key={option.title}>
@@ -55,17 +94,22 @@ class ListControl extends React.Component {
                 </ul>
               </div>
             </div>
-
         }
         {
           this.props.useDebug &&
             <div className="cp-row cp-debug">
-              <input type="checkbox" name="enableDebug" checked={this.state.enableDebug} onChange={this.props.handleDebug} /> Debug Data
+              <Checkbox
+                label="Debug Data"
+                isChecked={debugChecked}
+                onChange={this.handleDebugChange}
+                aria-label="Debug Data"
+                id="debug-data"/>
             </div>
         }
       </div>
     );
   }
+  /* eslint-enable max-lines-per-function */
 }
 
 ListControl.propTypes={

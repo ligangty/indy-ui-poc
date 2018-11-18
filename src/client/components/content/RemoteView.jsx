@@ -1,9 +1,10 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {StoreViewControlPanel as ControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './Hints.jsx';
-// import {ViewJsonDebugger} from './Debugger.jsx';
 import {Utils} from '../CompUtils.js';
 import {Filters} from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
@@ -55,8 +56,8 @@ export default class RemoteView extends React.Component {
         store.disabled = raw.disabled === undefined ? false : raw.disabled;
         store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
         store.useProxy = raw.proxy_host && true;
-        store.useAuth = store.useProxy && store.proxy_user;
-        store.useAuth = store.useAuth || store.user;
+        // eslint-disable-next-line no-extra-parens
+        store.useAuth = (store.useProxy && store.proxy_user) || store.user;
         this.setState({
           raw
         });
@@ -89,7 +90,6 @@ export default class RemoteView extends React.Component {
     });
   };
 
-  // eslint-disable-next-line max-lines-per-function
   render() {
     let store = this.state.store;
     if(!Utils.isEmptyObj(store)) {
@@ -151,7 +151,7 @@ RemoteView.propTypes={
   match: PropTypes.object
 };
 
-// eslint-disable-next-line max-lines-per-function
+
 const BasicSection = ({store})=> <div className="fieldset">
       <div className="detail-field">
           <label>Package Type:</label>
@@ -236,11 +236,12 @@ const BasicSection = ({store})=> <div className="fieldset">
         </div>
       </div>
     </div>;
+
 BasicSection.propTypes = {
   store: PropTypes.object.isRequired
 };
 
-// eslint-disable-next-line max-lines-per-function
+
 const RemoteAccessSection = ({store})=> <div className="fieldset">
       <div className="detail-field">
         <label>Request Timeout:</label>
@@ -357,7 +358,6 @@ const RemoteAccessSection = ({store})=> <div className="fieldset">
 
       }
     </div>;
-
 
 RemoteAccessSection.propTypes={
   store: PropTypes.object.isRequired

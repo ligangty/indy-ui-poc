@@ -1,5 +1,10 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
+import {
+  PageSection,
+  TextContent,
+  Text
+} from '@patternfly/react-core/';
 import RemoteList from './RemoteList.jsx';
 import HostedList from './HostedList.jsx';
 import GroupList from './GroupList.jsx';
@@ -15,8 +20,13 @@ import {APP_ROOT} from '../ComponentConstants.js';
 // <![endif]-->`;
 
 // const isHome = false;
-
-const Home = () => <React.Fragment>Welcome! Make a selection from the menu above to proceed.</React.Fragment>;
+const Home = () =><React.Fragment>
+    <PageSection>
+      <TextContent>
+        <Text component="h1">Welcome! Make a selection from the menu above to proceed.</Text>
+      </TextContent>
+    </PageSection>
+  </React.Fragment>;
 
 const Container = () => <div>
     {
