@@ -13,11 +13,11 @@ module.exports = {
   mode: 'production',
   module: {
     rules: [
-      { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx?$/, use: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      {test: /\.js$/u, use: 'babel-loader', exclude: /node_modules/u},
+      {test: /\.jsx?$/u, use: 'babel-loader', exclude: /node_modules/u},
+      {test: /\.css$/u, use: ['style-loader', 'css-loader']},
       {
-        test: /\.less$/,
+        test: /\.less$/u,
         use: [
           {
             loader: "style-loader"
@@ -36,7 +36,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(pdf|jpg|png|gif|svg|ico)$/,
+        test: /\.(pdf|jpg|png|gif|svg|ico)$/u,
         use: [
           {
             loader: 'url-loader'
@@ -45,5 +45,4 @@ module.exports = {
       }
     ]
   }
-
-}
+};
