@@ -37,7 +37,7 @@ export default class GroupList extends React.Component {
         });
       }
     });
-  }
+  };
 
   getDisTimeouts = () => {
     jsonGet({
@@ -52,27 +52,27 @@ export default class GroupList extends React.Component {
         Utils.logMessage("disable timeout get failed in group listing.");
       }
     });
-  }
+  };
 
   createNew = () => {
     // mock
-  }
+  };
 
   hideAll = () => {
     // mock
-  }
+  };
 
   handleSearch = event => {
     this.setState({
       listing: Utils.searchByKeyForNewStores(event.target.value, this.state.rawListing)
     });
-  }
+  };
 
   handleDebug = event => {
     this.setState({
       enableDebug: event.target.checked
     });
-  }
+  };
 
   render(){
     let listing = this.state.listing;

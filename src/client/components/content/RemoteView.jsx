@@ -26,23 +26,23 @@ export default class RemoteView extends React.Component {
 
   handleDisable = () => {
     // Mock
-  }
+  };
 
   handleEnable = () => {
     // Mock
-  }
+  };
 
   handleEdit = () => {
     // Mock
-  }
+  };
 
   handleCreate = () => {
     // Mock
-  }
+  };
 
   handleRemove = () => {
     // Mock
-  }
+  };
 
   getStore = () => {
     let match = this.props.match;
@@ -68,7 +68,7 @@ export default class RemoteView extends React.Component {
         });
       }
     });
-  }
+  };
 
   getStoreDisableTimeout = store => {
     jsonGet({
@@ -87,7 +87,7 @@ export default class RemoteView extends React.Component {
         });
       }
     });
-  }
+  };
 
   // eslint-disable-next-line max-lines-per-function
   render() {

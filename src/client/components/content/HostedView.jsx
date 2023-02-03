@@ -25,23 +25,23 @@ export default class HostedView extends React.Component {
 
   handleDisable = () => {
     // mock
-  }
+  };
 
   handleEnable = () => {
     // mock
-  }
+  };
 
   handleEdit = () => {
     // mock
-  }
+  };
 
   handleCreate = () => {
     // mock
-  }
+  };
 
   handleRemove = () => {
     // mock
-  }
+  };
 
   getStore = () => {
     let match = this.props.match;
@@ -63,7 +63,7 @@ export default class HostedView extends React.Component {
         });
       }
     });
-  }
+  };
 
   getStoreDisableTimeout = store => {
     jsonGet({
@@ -82,7 +82,7 @@ export default class HostedView extends React.Component {
         });
       }
     });
-  }
+  };
 
   render() {
     let store = this.state.store;

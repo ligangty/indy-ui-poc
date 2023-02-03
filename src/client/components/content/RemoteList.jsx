@@ -42,7 +42,7 @@ export default class RemoteList extends React.Component {
         });
       }
     });
-  }
+  };
 
   getDisTimeouts = () => {
     jsonGet({
@@ -57,23 +57,23 @@ export default class RemoteList extends React.Component {
         Utils.logMessage("disable timeout get failed in remote listing.");
       }
     });
-  }
+  };
 
   createNew = () => {
     // mock
-  }
+  };
 
   handleDebug = event => {
     this.setState({
       enableDebug: event.target.checked
     });
-  }
+  };
 
   handleSearch = event => {
     this.setState({
       listing: Utils.searchByKeyForNewStores(event.target.value, this.state.rawListing)
     });
-  }
+  };
 
   // eslint-disable-next-line max-lines-per-function
   render(){

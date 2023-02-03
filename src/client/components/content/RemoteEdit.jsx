@@ -34,15 +34,15 @@ export default class RemoteEdit extends React.Component {
 
   handleSave = () => {
     // TODO need to implement save logic
-  }
+  };
 
   handleCancel = () => {
     // TODO need to implement cancel logic
-  }
+  };
 
   handleRemove = () => {
     // TODO need to implement remove logic
-  }
+  };
 
   // eslint-disable-next-line max-lines-per-function
   render(){

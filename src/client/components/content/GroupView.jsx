@@ -25,23 +25,23 @@ export default class GroupView extends React.Component {
 
   handleDisable = () => {
     // Mock
-  }
+  };
 
   handleEnable = () => {
     // Mock
-  }
+  };
 
   handleEdit = () => {
     // Mock
-  }
+  };
 
   handleCreate = () => {
     // Mock
-  }
+  };
 
   handleRemove = () => {
     // Mock
-  }
+  };
 
   getStore = () => {
     let match = this.props.match;
@@ -63,7 +63,7 @@ export default class GroupView extends React.Component {
         });
       }
     });
-  }
+  };
 
   getDisTimeouts = store => {
     jsonGet({
@@ -87,7 +87,7 @@ export default class GroupView extends React.Component {
         });
       }
     });
-  }
+  };
 
   /* eslint-disable-next-line max-lines-per-function */
   render() {
