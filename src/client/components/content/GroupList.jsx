@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {PropTypes} from 'prop-types';
 import {Utils} from '../CompUtils.js';
 import ListControl from "./ListControl.jsx";
 import {ListJsonDebugger} from './Debugger.jsx';

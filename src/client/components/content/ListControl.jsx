@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import {React, useState} from 'react';
+import {PropTypes} from 'prop-types';
 
 export default function ListControl({handleCreateNew, useHideAll, handleHideAll,
   useSearch, handleSearch, useOrderBy, orderBys, useLegend, legends,

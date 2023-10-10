@@ -1,5 +1,5 @@
-import {jsonGet} from '../RestClient.js';
-import {APP_ROOT} from './ComponentConstants.js';
+import jsonGet from '../RestClient.js';
+import APP_ROOT from './ComponentConstants.js';
 
 export const Utils = {
   remoteOptions: store => {

@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import {React, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {PropTypes} from 'prop-types';
 import {StoreViewControlPanel as ControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint} from './Hints.jsx';
-// import {ViewJsonDebugger} from './Debugger.jsx';
+// import ViewJsonDebugger from './Debugger.jsx';
 import {Utils} from '../CompUtils.js';
 import {Filters} from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';

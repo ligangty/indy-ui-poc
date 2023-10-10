@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import {React, useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {PropTypes} from 'prop-types';
 import {StoreViewControlPanel as ControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './Hints.jsx';
-// import {ViewJsonDebugger} from './Debugger.jsx';
+// import ViewJsonDebugger from './Debugger.jsx';
 import {Utils} from '../CompUtils.js';
 import {Filters} from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
-// import {APP_ROOT} from '../ComponentConstants.js';
+// import APP_ROOT from '../ComponentConstants.js';
 import {jsonGet} from '../../RestClient.js';
 
 const getStoreDisableTimeout = (store, setState) => {

@@ -1,4 +1,4 @@
-const jsonGet = function(payload){
+export const jsonGet = function(payload){
   fetch(payload.url, {
     method: "GET",
     credentials: 'same-origin',
@@ -17,5 +17,3 @@ const jsonGet = function(payload){
     }
   });
 };
-
-export {jsonGet};

@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import {React, useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {PropTypes} from 'prop-types';
 import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './Hints.jsx';
-// import {ViewJsonDebugger} from './Debugger.jsx';
-// import {Utils} from '../CompUtils.js';
-// import {Filters} from '../Filters.js';
+// import ViewJsonDebugger from './Debugger.jsx';
+// import Utils from '../CompUtils.js';
+// import Filters from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
-import {packageTypes} from '../ComponentConstants.js';
-// import {jsonGet} from '../../RestClient.js';
+import {PackageTypes} from '../ComponentConstants.js';
+// import jsonGet from '../../RestClient.js';
 
 const handlers = {
   handleSave: () => {
@@ -46,7 +46,7 @@ export default function RemoteEdit() {
   // let raw = state.rawStore;
   // let store = state.store;
   // TODO this package types should be fetched from backend
-  let pkgTypes = packageTypes;
+  let pkgTypes = PackageTypes;
   return (
     <div className="container-fluid">
 

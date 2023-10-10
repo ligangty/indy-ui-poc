@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import RemoteList from './RemoteList.jsx';
 import HostedList from './HostedList.jsx';
 import GroupList from './GroupList.jsx';
@@ -18,31 +18,31 @@ import {APP_ROOT} from '../ComponentConstants.js';
 
 const Home = () => <React.Fragment>Welcome! Make a selection from the menu above to proceed.</React.Fragment>;
 
-const Container = () => <div>
+export const Container = () => <div>
     {
      // browseCompatible
     }
     <React.Fragment>
-      <Switch>
-        <Route exact path={[`${APP_ROOT}`]} component={Home} />
-        <Route exact path={`${APP_ROOT}/remote`} component={RemoteList} />
-        <Route exact path={`${APP_ROOT}/hosted`} component={HostedList} />
-        <Route exact path={`${APP_ROOT}/group`} component={GroupList} />
+      <Routes>
+        <Route exact path={`${APP_ROOT}`} element={<Home />} />
+        <Route exact path={`${APP_ROOT}/remote`} element={<RemoteList />} />
+        <Route exact path={`${APP_ROOT}/hosted`} element={<HostedList />} />
+        <Route exact path={`${APP_ROOT}/group`} element={<GroupList />} />
 
-        <Route path={`${APP_ROOT}/remote/:packageType/view/:name`} component={RemoteView} />
-        <Route path={`${APP_ROOT}/hosted/:packageType/view/:name`} component={HostedView} />
-        <Route path={`${APP_ROOT}/group/:packageType/view/:name`} component={GroupView} />
+        <Route path={`${APP_ROOT}/remote/:packageType/view/:name`} element={<RemoteView />} />
+        <Route path={`${APP_ROOT}/hosted/:packageType/view/:name`} element={<HostedView />} />
+        <Route path={`${APP_ROOT}/group/:packageType/view/:name`} element={<GroupView />} />
+
+        <Route exact path={`${APP_ROOT}/remote/new`} element={<RemoteEdit />} />
+        <Route exact path={`${APP_ROOT}/remote/:packageType/edit/:name`} element={<RemoteEdit />} />
         {
-        <Route exact path={[`${APP_ROOT}/remote/new`,`${APP_ROOT}/remote/:packageType/edit/:name`]} component={RemoteEdit} />
-        // <Route exact path={[`${APP_ROOT}/hosted/new`,`${APP_ROOT}/hosted/:packageType/edit/:name`]} component={HostedEdit} />
-        // <Route exact path={[`${APP_ROOT}/group/new`,`${APP_ROOT}/group/:packageType/edit/:name`]} component={GroupEdit} />
+        // <Route exact path={[`${APP_ROOT}/hosted/new`,`${APP_ROOT}/hosted/:packageType/edit/:name`]} element={HostedEdit} />
+        // <Route exact path={[`${APP_ROOT}/group/new`,`${APP_ROOT}/group/:packageType/edit/:name`]} element={GroupEdit} />
 
-        // <Route exact path={[`${APP_ROOT}/nfc`, `${APP_ROOT}/nfc/view/all`, `${APP_ROOT}/nfc/view/:packageType/:type/:name`]} component={} />
+        // <Route exact path={[`${APP_ROOT}/nfc`, `${APP_ROOT}/nfc/view/all`, `${APP_ROOT}/nfc/view/:packageType/:type/:name`]} element={} />
         //
-        // <Route exact path={`${APP_ROOT}/logout`} component={} />
+        // <Route exact path={`${APP_ROOT}/logout`} element={} />
         }
-      </Switch>
+      </Routes>
     </React.Fragment>
   </div>;
-
-export default Container;
