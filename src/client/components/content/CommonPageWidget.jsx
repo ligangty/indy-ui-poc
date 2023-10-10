@@ -2,7 +2,6 @@ import {React, Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {Utils} from '../CompUtils.js';
-import {APP_ROOT} from "../ComponentConstants.js";
 
 const LocalURLSection = ({storeKey}) => <div className="left-half">
     <label>Local URL:</label>{' '}
@@ -27,7 +26,7 @@ CapabilitiesSection.propTypes = {
 };
 
 const StoreNameSection = ({store, storeClass}) => <div className="fieldset-caption">
-    <Link to={`${APP_ROOT}/${store.type}/${store.packageType}/view/${store.name}`}>
+    <Link to={`/${store.type}/${store.packageType}/view/${store.name}`}>
       <span className={storeClass}>{store.packageType}-{store.name}</span>
     </Link>
   </div>;

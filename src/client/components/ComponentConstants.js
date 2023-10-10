@@ -17,6 +17,5 @@ const PackageTypes = [
   'npm'
 ];
 
-const APP_ROOT = '';
 
-export {APP_ROOT, remoteOptionLegend, hostedOptionLegend, PackageTypes};
+export {remoteOptionLegend, hostedOptionLegend, PackageTypes};

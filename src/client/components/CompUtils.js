@@ -1,5 +1,4 @@
 import jsonGet from '../RestClient.js';
-import APP_ROOT from './ComponentConstants.js';
 
 export const Utils = {
   remoteOptions: store => {
@@ -33,7 +32,7 @@ export const Utils = {
   },
   detailHref: key => {
     let parts = key.split(':');
-    return `${APP_ROOT}/${parts[1]}/${parts[0]}/view/${parts[2]}`;
+    return `/${parts[1]}/${parts[0]}/view/${parts[2]}`;
   },
   typeFromKey: key=>{
     let parts = key.split(':');

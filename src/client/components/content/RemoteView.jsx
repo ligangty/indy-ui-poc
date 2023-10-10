@@ -7,7 +7,6 @@ import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './Hints.jsx'
 import {Utils} from '../CompUtils.js';
 import {Filters} from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
-// import APP_ROOT from '../ComponentConstants.js';
 import {jsonGet} from '../../RestClient.js';
 
 const getStoreDisableTimeout = (store, setState) => {

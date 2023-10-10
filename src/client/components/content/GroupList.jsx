@@ -5,7 +5,6 @@ import {Utils} from '../CompUtils.js';
 import ListControl from "./ListControl.jsx";
 import {ListJsonDebugger} from './Debugger.jsx';
 import {LocalURLSection, StoreNameSection} from './CommonPageWidget.jsx';
-import {APP_ROOT} from '../ComponentConstants.js';
 
 const init = function (state, setState){
   useEffect(()=>{
@@ -69,7 +68,7 @@ const GroupListItem = ({store, storeClass, disableMap}) => {
                       let itemStoreClass = Utils.isDisabled(item.key, disableMap)? "disabled-store":"enabled-store";
                       return (
                         <li key={item.key}>
-                          <Link to={`${APP_ROOT}/${item.type}/${item.packageType}/view/${item.name}`}>
+                          <Link to={`/${item.type}/${item.packageType}/view/${item.name}`}>
                               <span className={itemStoreClass}>{item.key}</span>
                           </Link>
                           {

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
-import {APP_ROOT} from '../ComponentConstants.js';
 
 // mock user login
 const isUserloggedIn = true;
@@ -14,26 +13,26 @@ export default function IndyNavHeader(){
   }
   // TODO: addons will be render based on the backend addons response, this is a mock;
   let addons=[
-    <Link key="autoproxy-calc" className="dropdown-item" to={`${APP_ROOT}/autoprox/calc`}>AutoProx Calculator</Link>,
-    <Link key="autoproxy-rules" className="dropdown-item" to={`${APP_ROOT}/autoprox/rules`}>AutoProx Rules</Link>,
-    <Link key="store-changelog" className="dropdown-item" to={`${APP_ROOT}/revisions/changelog/stores`}>Store Changelogs</Link>
+    <Link key="autoproxy-calc" className="dropdown-item" to="/autoprox/calc">AutoProx Calculator</Link>,
+    <Link key="autoproxy-rules" className="dropdown-item" to="/autoprox/rules">AutoProx Rules</Link>,
+    <Link key="store-changelog" className="dropdown-item" to="/revisions/changelog/stores">Store Changelogs</Link>
   ];
   return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" role="navigation">
-      <Link className="navbar-brand" to={APP_ROOT}>Indy</Link>
+      <Link className="navbar-brand" to="">Indy</Link>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li key="list-remote" className="nav-item">
-            <Link className="nav-link" to={`${APP_ROOT}/remote`}>Remote Repositories</Link>
+            <Link className="nav-link" to="/remote">Remote Repositories</Link>
           </li>
           <li key="list-hosted" className="nav-item">
-            <Link className="nav-link" to={`${APP_ROOT}/hosted`}>Hosted Repositories</Link>
+            <Link className="nav-link" to="/hosted">Hosted Repositories</Link>
           </li>
           <li key="list-group" className="nav-item">
-            <Link className="nav-link" to={`${APP_ROOT}/group`}>Groups</Link>
+            <Link className="nav-link" to="/group">Groups</Link>
           </li>
           <li key="rest-api" className="nav-item">
             <a className="nav-link"href="rest-api.html">REST API</a>
@@ -45,8 +44,8 @@ export default function IndyNavHeader(){
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
               <a className="dropdown-item" href="/api/diag/bundle">Diagnostic Bundle</a>
               <a className="dropdown-item" href="/api/diag/repo">Repo Bundle</a>
-              <Link className="dropdown-item" to={`${APP_ROOT}/nfc`}>Not-Found Cache</Link>
-              <Link className="dropdown-item" to={`${APP_ROOT}/cache/delete`}>Delete Cache</Link>
+              <Link className="dropdown-item" to="/nfc">Not-Found Cache</Link>
+              <Link className="dropdown-item" to="/cache/delete">Delete Cache</Link>
               <div className="dropdown-divider"></div>
               {addons}
             </div>
@@ -57,7 +56,7 @@ export default function IndyNavHeader(){
                 {username}
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Link className="dropdown-item" to={`${APP_ROOT}/logout`}>Log Out</Link>
+                <Link className="dropdown-item" to="/logout">Log Out</Link>
               </div>
             </li>
           }
