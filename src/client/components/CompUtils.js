@@ -1,4 +1,4 @@
-import jsonGet from '../RestClient.js';
+import {jsonGet} from '../RestClient.js';
 
 export const Utils = {
   remoteOptions: store => {

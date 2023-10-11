@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import React, {useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';

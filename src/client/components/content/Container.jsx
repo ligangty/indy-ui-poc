@@ -22,8 +22,8 @@ export const Container = () => <div>
     }
     <React.Fragment>
       <Routes>
+        <Route path="*" element={<Home />} />
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/*" element={<Home />} />
         <Route exact path="/remote" element={<RemoteList />} />
         <Route exact path="/hosted" element={<HostedList />} />
         <Route exact path="/group" element={<GroupList />} />
@@ -33,7 +33,7 @@ export const Container = () => <div>
         <Route path="/group/:packageType/view/:name" element={<GroupView />} />
 
         <Route exact path="/remote/new" element={<RemoteEdit />} />
-        <Route exact path="/remote/:packageType/edit/:name" element={<RemoteEdit />} />
+        <Route path="/remote/:packageType/edit/:name" element={<RemoteEdit />} />
         {
         // <Route exact path={["/hosted/new","/hosted/:packageType/edit/:name"]} element={HostedEdit} />
         // <Route exact path={["/group/new","/group/:packageType/edit/:name"]} element={GroupEdit} />

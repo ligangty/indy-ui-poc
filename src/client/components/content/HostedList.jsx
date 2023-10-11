@@ -1,4 +1,4 @@
-import {React, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ListControl from "./ListControl.jsx";
 import {ListJsonDebugger} from './Debugger.jsx';
 import {Utils} from '../CompUtils.js';
