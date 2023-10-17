@@ -140,6 +140,7 @@ export const Utils = {
   },
   getStores: (state, setState, storeType) => {
     let url = `/api/admin/stores/_all/${storeType}`;
+    let items = [];
     jsonGet({
       url,
       done: response => {

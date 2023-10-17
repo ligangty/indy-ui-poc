@@ -8,7 +8,7 @@ import {StoreListingWidget} from './CommonPageWidget.jsx';
 const init = (state, setState) => {
   useEffect(()=>{
     Utils.getStores(state, setState, "remote");
-  }, [state.listing]);
+  }, []);
 };
 
 const handlers = {
@@ -38,6 +38,7 @@ export default function RemoteList() {
 
   init(state, setState);
   let listing = state.listing;
+  Utils.logMessage(listing);
   let disMap = state.disabledMap;
   let orderBys = [
     {value: 'key', text: 'Name'},
@@ -51,7 +52,13 @@ export default function RemoteList() {
         useLegend={true} legends={options}
         useDebug={true} handleDebug={event => handlers.handleDebug(event, setState)}
         handleCreateNew={handlers.createNew} />
-      <StoreListingWidget StoreList={listing} DisMap={disMap} StoreType="remote" />
+      {
+      state.listing?
+      <StoreListingWidget StoreList={listing} DisMap={disMap} StoreType="remote" />:
+      <div className="container-fluid">
+        No content fetched!
+      </div>
+      }
       <ListJsonDebugger enableDebug={state.enableDebug} jsonObj={state.listing} />
     </div>
   );

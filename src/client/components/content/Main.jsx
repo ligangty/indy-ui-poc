@@ -16,14 +16,13 @@ import RemoteEdit from './RemoteEdit.jsx';
 
 const Home = () => <React.Fragment>Welcome! Make a selection from the menu above to proceed.</React.Fragment>;
 
-export const Container = () => <div>
+export const Main = () => <div>
     {
      // browseCompatible
     }
     <React.Fragment>
       <Routes>
         <Route path="*" element={<Home />} />
-        <Route exact path="/" element={<Home />} />
         <Route exact path="/remote" element={<RemoteList />} />
         <Route exact path="/hosted" element={<HostedList />} />
         <Route exact path="/group" element={<GroupList />} />

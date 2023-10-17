@@ -57,7 +57,7 @@ const getStore = setState => {
 const init = (state, setState) => {
   useEffect(()=>{
     getStore(state, setState);
-  }, [state.raw]);
+  }, []);
 };
 
 const handlers = {
