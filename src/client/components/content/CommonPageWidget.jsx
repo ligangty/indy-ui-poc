@@ -39,7 +39,7 @@ StoreNameSection.propTypes = {
 const StoreListingWidget = ({StoreList, DisMap, StoreType}) => {
   let listing = StoreList;
   let disMap = DisMap;
-  if(listing && listing.size >0){
+  if(listing && listing.length >0){
     return (
       <div className="content-panel">
         <div className="store-listing">

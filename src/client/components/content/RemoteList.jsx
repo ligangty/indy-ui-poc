@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import {ListJsonDebugger} from './Debugger.jsx';
 import ListControl from "./ListControl.jsx";
 import {remoteOptionLegend as options} from "../ComponentConstants.js";
@@ -7,7 +8,37 @@ import {StoreListingWidget} from './CommonPageWidget.jsx';
 
 const init = (state, setState) => {
   useEffect(()=>{
-    Utils.getStores(state, setState, "remote");
+    const fetchdData = async ()=>{
+      let isError = false;
+      const response = await axios.get(`/api/admin/stores/_all/remote`).catch(error=>{
+          isError = true;
+          let message = "";
+          if (error.response) {
+            message = JSON.parse(error.response.data).error;
+          }else{
+            message = error;
+          }
+          setState({
+            message
+          });
+      });
+      if (!isError){
+        const timeoutResponse = await axios.get('/api/admin/schedule/store/all/disable-timeout').catch(error=>{
+          isError=true;
+          Utils.logMessage(`disable timeout get failed in remote listing! Error reason: ${error}`);
+        });
+        let disabledMap = {};
+        if (!isError){
+          disabledMap = Utils.setDisableMap(timeoutResponse.data, state.listing);
+        }
+        setState({
+          listing: response.data.items,
+          rawListing: response.data.items,
+          disabledMap
+        });
+      }
+    };
+    fetchdData();
   }, []);
 };
 
@@ -37,8 +68,8 @@ export default function RemoteList() {
   });
 
   init(state, setState);
+  // Utils.logMessage(state);
   let listing = state.listing;
-  Utils.logMessage(listing);
   let disMap = state.disabledMap;
   let orderBys = [
     {value: 'key', text: 'Name'},
@@ -53,7 +84,7 @@ export default function RemoteList() {
         useDebug={true} handleDebug={event => handlers.handleDebug(event, setState)}
         handleCreateNew={handlers.createNew} />
       {
-      state.listing?
+      listing?
       <StoreListingWidget StoreList={listing} DisMap={disMap} StoreType="remote" />:
       <div className="container-fluid">
         No content fetched!

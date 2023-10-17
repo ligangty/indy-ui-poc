@@ -124,6 +124,7 @@ export const Utils = {
     params.forEach(p => allParams.push(p));
     Reflect.apply(console.log, undefined, allParams);
   },
+  // TODO: not used?
   getDisTimeouts: (state, setState, storeType) => {
     jsonGet({
       url: '/api/admin/schedule/store/all/disable-timeout',
@@ -138,9 +139,9 @@ export const Utils = {
       }
     });
   },
+  // TODO: Not used?
   getStores: (state, setState, storeType) => {
     let url = `/api/admin/stores/_all/${storeType}`;
-    let items = [];
     jsonGet({
       url,
       done: response => {
