@@ -1,6 +1,6 @@
 const path = require('path');
-// const webpack = require('webpack');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const outputDirectory = 'build';
 
@@ -10,20 +10,7 @@ module.exports = {
     path: path.resolve(__dirname, outputDirectory),
     filename: 'index_bundle.js'
   },
-  mode: 'development',
-  devtool: 'inline-source-map',
-  // devServer: {
-  //   port: 3000,
-  //   contentBase: './build',
-  //   historyApiFallback: {
-  //     rewrites: [
-  //       { from: /\/browse\/.*/, to: '/' },
-  //     ]
-  //   },
-  //   proxy: {
-  //     '/api': 'http://localhost:8080'
-  //   }
-  // },
+  mode: 'production',
   module: {
     rules: [
       {test: /\.js$/u, use: 'babel-loader', exclude: /node_modules/u},
