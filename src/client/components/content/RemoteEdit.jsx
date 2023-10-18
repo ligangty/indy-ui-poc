@@ -1,14 +1,63 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
+import axios from 'axios';
 import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './Hints.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
-// import Utils from '../CompUtils.js';
+import Utils from '../CompUtils.js';
 // import Filters from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
 import {PackageTypes} from '../ComponentConstants.js';
 // import jsonGet from '../../RestClient.js';
+
+const init = (pkgType, storeName, setState) => {
+  const getUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
+  useEffect(()=>{
+    const fetchStore = async () =>{
+      // get Store data
+      let isError = false;
+      const response = await axios.get(getUrl).catch(error =>{
+        isError = true;
+        let message = "";
+        if (error.response) {
+          message = JSON.parse(error.response.data).error;
+        }else{
+          message = error;
+        }
+        setState({
+          message
+        });
+      });
+      if (!isError){
+        let raw = response.data;
+        let store = Utils.cloneObj(raw);
+        store.disabled = raw.disabled === undefined ? false : raw.disabled;
+        store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
+        store.useProxy = raw.proxy_host && true;
+        store.useAuth = store.useProxy && store.proxy_user;
+        store.useAuth = store.useAuth || store.user;
+
+        // get Store disablement data
+        const timeoutUrl = `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`;
+        const timeoutResponse = await axios.get(timeoutUrl).catch(error=>{
+          isError = true;
+          Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`);
+        });
+        let newStore = Utils.cloneObj(store);
+        if (!isError){
+          newStore.disableExpiration = timeoutResponse.data.expiration;
+        }
+        // Change state and re-rendering
+        setState({
+          store: newStore
+        });
+      }
+    };
+
+    fetchStore();
+  }, []);
+};
 
 const handlers = {
   handleSave: () => {
@@ -39,6 +88,7 @@ export default function RemoteEdit() {
 
   if(mode === 'edit'){
     [packageType, name] = useParams();
+    init(packageType, name, setState);
   }
 
   mode = state.mode;

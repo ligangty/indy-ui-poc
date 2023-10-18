@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {StoreViewControlPanel as ControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './Hints.jsx';
@@ -10,59 +10,13 @@ import {Filters} from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
 import axios from 'axios';
 
-// const getStoreDisableTimeout = (store, setState) => {
-//   jsonGet({
-//     url: `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`,
-//     done: response => {
-//       let newStore = Utils.cloneObj(store);
-//       newStore.disableExpiration = response.expiration;
-//       setState({
-//         store: newStore
-//       });
-//     },
-//     fail: () => {
-//       Utils.logMessage("disable timeout getting failed");
-//       setState({
-//         store
-//       });
-//     }
-//   });
-// };
-
-// const getStore = setState => {
-//   const [packageType, name] = useParams();
-//   let getUrl = `/api/admin/stores/${packageType}/remote/${name}`;
-//   jsonGet({
-//     url: getUrl,
-//     done: response => {
-//       let raw = response;
-//       let store = Utils.cloneObj(raw);
-//       store.disabled = raw.disabled === undefined ? false : raw.disabled;
-//       store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
-//       store.useProxy = raw.proxy_host && true;
-//       store.useAuth = store.useProxy && store.proxy_user;
-//       store.useAuth = store.useAuth || store.user;
-//       setState({
-//         raw
-//       });
-//       getStoreDisableTimeout(store, setState);
-//     },
-//     fail: errorText => {
-//       setState({
-//         message: JSON.parse(errorText).error
-//       });
-//     }
-//   });
-// };
-
-const init = (state, setState) => {
-  const {packageType, name} = useParams();
-  const getUrl = `/api/admin/stores/${packageType}/remote/${name}`;
+const init = (pkgType, storeName, setState) => {
+  const storeUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
   useEffect(()=>{
     const fetchStore = async () =>{
       // get Store data
       let isError = false;
-      const response = await axios.get(getUrl).catch(error =>{
+      const response = await axios.get(storeUrl).catch(error =>{
         isError = true;
         let message = "";
         if (error.response) {
@@ -103,47 +57,49 @@ const init = (state, setState) => {
     fetchStore();
   }, []);
 };
-
 const handlers = {
   handleDisable: () => {
     // mock
   },
-
   handleEnable: () => {
     // mock
   },
-
-  handleEdit: () => {
-    // mock
-  },
-
+  // handleEdit: () => {
+  //   navigate(`/remote/${pkgType}/edit/${storeName}`);
+  // },
   handleCreate: () => {
     // mock
   },
-
   handleRemove: () => {
     // mock
   }
 };
+
 export default function RemoteView() {
   const [state, setState] = useState({
     store: {},
     raw: {},
     message: ''
   });
-
-  init(state, setState);
+  const {packageType, name} = useParams();
+  init(packageType, name, setState);
   let store = state.store;
   if(!Utils.isEmptyObj(store)) {
     return (
       <div className="container-fluid">
         <div className="control-panel">
           <ControlPanel
-            enabled={!store.disabled} handleEnable={handlers.handleEnable}
-            handleDisable={handlers.handleDisable}
-            handleEdit={handlers.handleEdit}
-            handleCreate={handlers.handleCreate}
-            handleRemove={handlers.handleRemove} />
+            enabled={!store.disabled}
+            storeObj={store}
+            // storeType="remote"
+            // pkgType={packageType}
+            // storeName={name}
+            // handleEnable={handlers.handleEnable}
+            // handleDisable={handlers.handleDisable}
+            // handleEdit={()=>navigate(`/remote/${pkgType}/edit/${storeName}`)}
+            // handleCreate={handlers.handleCreate}
+            // handleRemove={handlers.handleRemove}
+          />
         </div>
 
         <div className="content-panel">

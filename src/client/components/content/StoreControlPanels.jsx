@@ -1,5 +1,8 @@
 import React from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
+import axios from 'axios';
+import {Utils} from '../CompUtils';
 
 const StoreEditControlPanel = ({handleSave, handleCancel, handleRemove}) => <div className="cp-row">
     <button name="save" onClick={handleSave} className="cp-button">Save</button>{'  '}
@@ -14,17 +17,32 @@ StoreEditControlPanel.propTypes={
   handleRemove: PropTypes.func
 };
 
-const StoreViewControlPanel = function({enabled, handleDisable, handleEnable, handleEdit, handleCreate, handleRemove}){
-  let enableText = enabled?"Disable":"Enable";
-  let enableHandler = enabled?handleDisable:handleEnable;
+const StoreViewControlPanel = function({enabled, storeObj, handleDisable, handleEnable}){
+  const [enableText, enableHandler] = enabled?["Disable",handleDisable]:["Enable",handleEnable];
+  const navigate = useNavigate();
+
+  const [pkgType, storeType, storeName] = [storeObj.packageType, storeObj.type, storeObj.name];
+  const storeUrl = `/api/admin/stores/${pkgType}/${storeType}/${storeName}`;
+  const handleRemove = async ()=>{
+    const response = await axios.delete(storeUrl).catch(error =>{
+      // TODO: Some other way to handle errors?
+      Utils.logMessage(error);
+    });
+    if(response && response.status===204){
+      // TODO: Some other way to show deletion success?
+      Utils.logMessage("Store deleted.");
+    }
+    navigate(`/${storeObj.type}`);
+  };
+
   return(
     <div className="cp-row-group">
       <div className="cp-row">
         <button onClick={enableHandler}>{enableText}</button>
       </div>
       <div className="cp-row">
-        <button onClick={handleEdit}>Edit</button>{'  '}
-        <button onClick={handleCreate}>New...</button>{'  '}
+        <button onClick={()=>navigate(`/${storeType}/${pkgType}/edit/${storeName}`)}>Edit</button>{'  '}
+        <button onClick={()=>navigate(`/${storeType}/new`)}>New...</button>{'  '}
         <button name="del" onClick={handleRemove} className="del-button cp-button">
           Delete
         </button>
@@ -35,11 +53,12 @@ const StoreViewControlPanel = function({enabled, handleDisable, handleEnable, ha
 
 StoreViewControlPanel.propTypes={
   enabled: PropTypes.bool,
+  storeObj: PropTypes.object,
+  // storeType: PropTypes.string,
+  // pkgType: PropTypes.string,
+  // storeName: PropTypes.string,
   handleDisable: PropTypes.func,
-  handleEnable: PropTypes.func,
-  handleEdit: PropTypes.func,
-  handleCreate: PropTypes.func,
-  handleRemove: PropTypes.func
+  handleEnable: PropTypes.func
 };
 
 export {StoreEditControlPanel, StoreViewControlPanel};
