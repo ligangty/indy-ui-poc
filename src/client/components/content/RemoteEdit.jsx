@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, {useState, useEffect} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
@@ -5,10 +6,10 @@ import axios from 'axios';
 import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './Hints.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
-import Utils from '../CompUtils.js';
+import {Utils} from '../CompUtils.js';
 // import Filters from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
-import {PackageTypes} from '../ComponentConstants.js';
+import {PACKAGE_TYPES} from '../ComponentConstants.js';
 // import jsonGet from '../../RestClient.js';
 
 const init = (pkgType, storeName, setState) => {
@@ -31,26 +32,27 @@ const init = (pkgType, storeName, setState) => {
       });
       if (!isError){
         let raw = response.data;
-        let store = Utils.cloneObj(raw);
-        store.disabled = raw.disabled === undefined ? false : raw.disabled;
-        store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
-        store.useProxy = raw.proxy_host && true;
-        store.useAuth = store.useProxy && store.proxy_user;
-        store.useAuth = store.useAuth || store.user;
+        let storeView = Utils.cloneObj(raw);
+        storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
+        storeView.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
+        storeView.useProxy = raw.proxy_host && true;
+        // eslint-disable-next-line no-extra-parens
+        storeView.useAuth = (storeView.useProxy && storeView.proxy_user) || storeView.user;
 
         // get Store disablement data
-        const timeoutUrl = `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`;
+        const timeoutUrl = `/api/admin/schedule/store/${storeView.packageType}/${storeView.type}/${storeView.name}/disable-timeout`;
         const timeoutResponse = await axios.get(timeoutUrl).catch(error=>{
           isError = true;
           Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`);
         });
-        let newStore = Utils.cloneObj(store);
+        let cloned = Utils.cloneObj(storeView);
         if (!isError){
-          newStore.disableExpiration = timeoutResponse.data.expiration;
+          cloned.disableExpiration = timeoutResponse.data.expiration;
         }
         // Change state and re-rendering
         setState({
-          store: newStore
+          storeView: cloned,
+          store: raw
         });
       }
     };
@@ -75,28 +77,89 @@ const handlers = {
 
 export default function RemoteEdit() {
   const [state, setState] = useState({
-    mode: "",
-    packageType: "",
-    name: "",
     store: {},
-    rawStore: {}
+    storeView: {}
   });
   const location = useLocation();
-  let [packageType, name] = ["",""];
   const path = location.pathname;
   let mode = path.endsWith('remote/new')? 'new':'edit';
-
+  let [pkgType, storeName] = ["",""];
+  let store = {};
   if(mode === 'edit'){
-    [packageType, name] = useParams();
-    init(packageType, name, setState);
+    const {packageType, name} = useParams();
+    [pkgType, storeName] = [packageType, name];
+    init(pkgType, storeName, setState);
+    store = state.store;
   }
 
   mode = state.mode;
   // Utils.logMessage(mode);
-  // let raw = state.rawStore;
+  let storeView = state.storeView;
   // let store = state.store;
   // TODO this package types should be fetched from backend
-  let pkgTypes = PackageTypes;
+  let pkgTypes = PACKAGE_TYPES;
+
+  const handleCheckChange = (event, field) => {
+    if (event.target.checked) {
+      store[field] = true;
+    } else {
+      store[field] = false;
+    }
+  };
+  const handleValueChange = (event, field) => {
+    store[field] = event.target.value;
+  };
+  const handleRadioChange = (event, field) => {
+    store[field] = event.target.value;
+  };
+
+  const handleUseProxy = event=>{
+    // TODO: need to implement
+  };
+  const handleUseAuth = event => {
+    // TODO: need to implement
+  };
+  const handleUseX509 = event => {
+    // TODO: need to implement
+  };
+
+  const CertificateSection = function(){
+    return (
+      <div className="sub-fields">
+      {
+        storeView.useAuth &&
+        <div className="detail-field">
+          <label>Client Key Password:</label>
+          <input type="password" value={storeView.key_password} onChange={e=>handleValueChange(e, "key_password")}/><Hint hintKey="client_key" />
+        </div>
+      }
+        <div className="fieldset two-col">
+          {
+            storeView.useAuth &&
+            <div className="left-col">
+              <div className="textarea-label">
+                <label>Client Key</label><span className="hint">(PEM Format)</span>
+              </div>
+              {
+                // 64 columns is the original PEM line-length spec
+              }
+              <textarea className="cert" cols="68" value={storeView.key_certificate_pem} onChange={e=>handleValueChange(e, "key_certificate_pem")}></textarea>
+            </div>
+          }
+          <div className="right-col">
+            <div className="textarea-label">
+              <label>Server Certificate</label><span className="hint">(PEM Format)</span>
+            </div>
+            {
+              // 64 columns is the original PEM line-length spec
+            }
+            <textarea className="cert" cols="68" value={storeView.server_certificate_pem} onChange={e=>handleValueChange(e, "server_certificate_pem")}></textarea>
+          </div>
+        </div>
+    </div>
+    );
+  };
+
   return (
     <div className="container-fluid">
 
@@ -122,7 +185,7 @@ export default function RemoteEdit() {
                   }
                 </select>
               </span>:
-              <span className="key">{state.rawStore.packageType}</span>
+              <span className="key">{storeView.packageType}</span>
             }
           </div>
           <div className="detail-field">
@@ -130,19 +193,20 @@ export default function RemoteEdit() {
             {
               mode==='new'?
               <span><input type="text" size="25" /></span>:
-              <span className="key">{state.rawStore.name}</span>
+              <span className="key">{storeView.name}</span>
             }
           </div>
 
           <div className="detail-field">
-            <input type="checkbox" ng-model="raw.enabled" />{' '}
+            <input type="checkbox" checked={!storeView.disabled} onChange={e => handleCheckChange(e, "disabled")} />{' '}
             <label>Enabled?</label>
             {
-              <span className="hint" ng-if="!raw.enabled && raw.disableExpiration">Set to automatically re-enable at {TimeUtils.timestampToDateFormat(state.rawStore.disableExpiration)}</span>
+              storeView.disabled && store.disableExpiration &&
+              <span className="hint">Set to automatically re-enable at {TimeUtils.timestampToDateFormat(storeView.disableExpiration)}</span>
             }
           </div>
           <div className="detail-field">
-            <input type="checkbox" ng-model="store.authoritative_index" />{' '}
+            <input type="checkbox" checked={store.authoritative_index} onChange={e => handleCheckChange(e, "authoritative_index")} />{' '}
             <label>Authoritative content Index?</label>
             <span className="hint">Make the content index authoritative to this repository</span>
           </div>
@@ -150,48 +214,51 @@ export default function RemoteEdit() {
           <div className="sub-fields">
             <div className="detail-field">
               <label>Disable Timeout:</label>
-              <input type="text" ng-model="store.disable_timeout" />
+              <input type="text" value={store.disable_timeout} onChange={e => handleValueChange(e, "disable_timeout")} />
               <DisableTimeoutHint />
             </div>
           </div>
 
           <div className="detail-field">
             <label>Remote URL:</label>
-            <input type="text" ng-model="store.url" size="92"/>
+            <input type="text" value={store.url} size="92"/>
           </div>
 
           <div className="sub-fields">
             <div className="detail-field">
-              <input type="checkbox" ng-model="store.is_passthrough" />{' '}
+              <input type="checkbox" value={store.is_passthrough} onChange={e => handleCheckChange(e, "is_passthrough")} />{' '}
               <label>{"Don't Cache Content"}</label>
               <Hint hintKey="passthrough"/>
             </div>
-            <div ng-if="!store.is_passthrough" className="detail-field">
-              <label>Content Cache Timeout:</label>
-              <input type="text" ng-model="raw.cache_timeout_seconds"/>
-              <DurationHint />
-            </div>
-            <div ng-if="!store.is_passthrough" className="detail-field">
-              <label>Metadata Cache Timeout:</label>
-              <input type="text" ng-model="raw.metadata_timeout_seconds"/>
-              <DurationHint>{'24h 36m 00s. Negative means never timeout, 0 means using default timeout by Indy settings.'}</DurationHint>
-            </div>
+            {!store.is_passthrough && <React.Fragment>
+              <div className="detail-field">
+                <label>Content Cache Timeout:</label>
+                <input type="text" value={store.cache_timeout_seconds} onChange={e => handleValueChange(e, "cache_timeout_seconds")} />
+                <DurationHint />
+              </div>
+              <div className="detail-field">
+                <label>Metadata Cache Timeout:</label>
+                <input type="text" value={store.metadata_timeout_seconds} onChange={e => handleValueChange(e, "metadata_timeout_seconds")} />
+                <DurationHint>{'24h 36m 00s. Negative means never timeout, 0 means using default timeout by Indy settings.'}</DurationHint>
+              </div>
+            </React.Fragment>
+            }
           </div>
 
           <div className="sub-fields">
             <div className="detail-field">
               <label>Pre-fetching Priority:</label>
-              <input type="text" ng-model="store.prefetch_priority" size="5"/>
+              <input type="text" value={storeView.prefetch_priority} onChange={e=>handleValueChange(e,"prefetch_priority")} size="5"/>
               <PrefetchHint />
             </div>
             <div className="detail-field">
-              <span><input type="checkbox" ng-model="store.prefetch_rescan"/></span>{' '}
+              <span><input type="checkbox" checked={storeView.prefetch_rescan} onChange={e=>handleCheckChange(e,"prefetch_rescan")} /></span>{' '}
               <label>Allow Pre-fetching Rescan?</label>
             </div>
             <div className="detail-field">
               <label>Pre-fetching Listing Type:</label>
-              <input type="radio" ng-model="store.prefetch_listing_type" value="html"/> <span>html</span>{' '}
-              <input type="radio" ng-model="store.prefetch_listing_type" value="koji"/> <span>koji</span>
+              <input type="radio" checked={storeView.prefetch_listing_type==="html"} onChange={e=>handleRadioChange(e, "prefetch_listing_type")} value="html"/> <span>html</span>{' '}
+              <input type="radio" checked={storeView.prefetch_listing_type==="koji"} onChange={e=>handleRadioChange(e, "prefetch_listing_type")} value="koji"/> <span>koji</span>
             </div>
           </div>
         </div>
@@ -199,17 +266,17 @@ export default function RemoteEdit() {
 
         <div className="fieldset-caption">Description</div>
         <div className="fieldset">
-          <textarea rows="3" className="text-description" ng-model="store.description"></textarea>
+          <textarea rows="3" className="text-description" onChange={e=>handleValueChange(e,"description")}>{storeView.description}</textarea>
         </div>
 
         <div className="fieldset-caption">Capabilities</div>
         <div className="fieldset">
           <div className="detail-field">
-            <span><input type="checkbox" ng-model="store.allow_releases"/></span>{' '}
+            <span><input type="checkbox" checked={storeView.allow_releases} onChange={e=>handleCheckChange(e, "allow_releases")}/></span>{' '}
             <label>Allow Releases</label>
           </div>
           <div className="detail-field">
-            <span><input type="checkbox" ng-model="store.allow_snapshots"/></span>{' '}
+            <span><input type="checkbox" checked={storeView.allow_snapshots} onChange={e=>handleCheckChange(e, "allow_snapshots")}/></span>{' '}
             <label>Allow Snapshots</label>
           </div>
         </div>
@@ -218,7 +285,7 @@ export default function RemoteEdit() {
         <div className="fieldset">
           <div className="detail-field">
             <label>Request Timeout:</label>
-            <input type="text" ng-model="raw.timeout_seconds"/>
+            <input type="text" value={storeView.timeout_seconds} onChange={e=>handleValueChange(e, "timeout_seconds")}/>
             <DurationHint />
           </div>
           <div className="detail-hint">
@@ -229,77 +296,61 @@ export default function RemoteEdit() {
             // HTTP Proxy
           }
           <div className="detail-field">
-            <input type="checkbox" ng-model="raw.use_proxy" />{' '}
+            <input type="checkbox" checked={storeView.use_proxy} onChange={e=>handleUseProxy(e)} />{' '}
             <label>Use Proxy?</label>
           </div>
-          <div className="sub-fields" ng-if="raw.use_proxy">
+          {
+            storeView.useProxy&&
+            <div className="sub-fields">
               <div className="detail-field">
                 <label>Proxy Host:</label>
-                <input type="text" ng-model="store.proxy_host" size="20"/>
+                <input type="text" value="raw.proxy_host" onChange={e=>handleValueChange(e,"proxy_host")} size="20"/>
               </div>
               <div className="detail-field">
                 <label>Proxy Port:</label>
-                <input type="text" ng-model="store.proxy_port" size="6"/>
+                <input type="text" value="raw.proxy_port" onChange={e=>handleValueChange(e,"proxy_port")} size="6"/>
               </div>
-          </div>
-
+            </div>
+          }
           {
             // X.509 / auth
           }
           <div className="detail-field">
-            <input type="checkbox" ng-model="raw.use_auth" />{' '}
+            <input type="checkbox" checked={storeView.useAuth} onChange={e=>handleUseAuth(e)} />{' '}
             <label>Use Authentication?</label>
           </div>
-          <div className="sub-fields" ng-if="raw.use_auth">
+          {
+            storeView.useAuth &&
+            <div className="sub-fields">
               <div className="detail-field">
                 <label>Username:</label>
-                <input type="text" ng-model="store.user" size="25"/>
+                <input type="text" value={storeView.user} onChange={e=>handleValueChange(e, "user")} size="25"/>
               </div>
               <div className="detail-field">
                 <label>Password:</label>
-                <input type="password" ng-model="store.password" size="25"/>
+                <input type="password" value={storeView.password} onChange={e=>handleValueChange(e, "password")} size="25"/>
               </div>
-              <div className="detail-field" ng-if="raw.use_proxy">
-                <label>Proxy Username:</label>
-                <input type="text" ng-model="store.proxy_user" size="20"/>
-              </div>
-              <div className="detail-field" ng-if="raw.use_proxy">
-                <label>Proxy Password:</label>
-                <input type="password" ng-model="store.proxy_password" size="20"/>
+              {
+                storeView.use_proxy && <React.Fragment>
+                <div className="detail-field">
+                  <label>Proxy Username:</label>
+                  <input type="text" value={storeView.proxy_user} onChange={e=>handleValueChange(e, "proxy_user")} size="20"/>
+                </div>
+                <div className="detail-field">
+                  <label>Proxy Password:</label>
+                  <input type="password" value={storeView.proxy_password} onChange={e=>handleValueChange(e, "proxy_password")} size="20"/>
+                </div>
+              </React.Fragment>
+              }
             </div>
-          </div>
-
+          }
           <div className="detail-field">
-            <input type="checkbox" ng-model="raw.use_x509" />{' '}
+            <input type="checkbox" checked={storeView.useX509} onChange={e=>handleUseX509(e)} />{' '}
             <label>{`Use Custom X.509 Configuration?`}</label>
           </div>
-
-          <div className="sub-fields" ng-if="raw.use_x509">
-            <div className="detail-field" ng-if="raw.use_auth">
-              <label>Client Key Password:</label>
-              <input type="password" ng-model="store.key_password"/><Hint hintKey="client_key" />
-            </div>
-            <div className="fieldset two-col">
-              <div className="left-col" ng-if="raw.use_auth">
-                <div className="textarea-label">
-                  <label>Client Key</label><span className="hint">(PEM Format)</span>
-                </div>
-                {
-                  // 64 columns is the original PEM line-length spec
-                }
-                <textarea className="cert" cols="68" ng-model="store.key_certificate_pem"></textarea>
-              </div>
-              <div className="right-col">
-                <div className="textarea-label">
-                  <label>Server Certificate</label><span className="hint">(PEM Format)</span>
-                </div>
-                {
-                  // 64 columns is the original PEM line-length spec
-                }
-                <textarea className="cert" cols="68" ng-model="store.server_certificate_pem"></textarea>
-              </div>
-            </div>
-          </div>
+          {
+            storeView.useX509 && <CertificateSection />
+          }
         </div>
       </div>
       {

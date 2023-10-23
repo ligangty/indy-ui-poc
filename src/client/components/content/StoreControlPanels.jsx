@@ -1,5 +1,5 @@
 import React from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import axios from 'axios';
 import {Utils} from '../CompUtils';

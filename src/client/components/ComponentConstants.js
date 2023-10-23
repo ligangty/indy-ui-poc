@@ -11,11 +11,7 @@ const hostedOptionLegend = [
 ];
 
 // TODO this should be fetched from backend
-const PackageTypes = [
-  'maven',
-  'generic',
-  'npm'
-];
+const PACKAGE_TYPES = ["maven", "generic","npm"];
 
 
-export {remoteOptionLegend, hostedOptionLegend, PackageTypes};
+export {remoteOptionLegend, hostedOptionLegend, PACKAGE_TYPES};
